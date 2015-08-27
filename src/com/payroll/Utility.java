@@ -36,18 +36,10 @@ public class Utility {
      * @param inputString
      * @return formatted String with no
      */
-    public static String removeNonEnglishCharacters(String inputString){
-        StringBuilder inputStringBuilder = new StringBuilder();
-        if( inputString!=null && !"".equalsIgnoreCase(inputString) ) {
-
-            for ( Character character : inputString.toCharArray() ){
-
-                if (  Character.isLetter(character ) ){
-                    inputStringBuilder.append(character);
-                }
-            }
-
+    public static String removeCommas(String inputString){
+        if( inputString.indexOf(",")>0){
+            inputString = inputString.replaceAll(",", "");
         }
-        return inputStringBuilder.toString();
+        return inputString;
     }
 }
