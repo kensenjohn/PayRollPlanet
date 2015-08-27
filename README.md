@@ -1,5 +1,5 @@
 # PayrollPlanet
-Simple REST API to calcuate salary from gross, amount and deductions provided.
+Simple REST API to calculate salary from gross, amount and deductions provided.
 
 All the dependent jars used can be accessed in the followin location<br>
 /web/WEB-INF/lib
