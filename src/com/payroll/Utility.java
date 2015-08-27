@@ -32,7 +32,7 @@ public class Utility {
     }
 
     /**
-     * Remove all non English Characters in a String.
+     * Remove all commas if they appear in a String.
      * @param inputString
      * @return formatted String with no
      */

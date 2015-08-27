@@ -146,8 +146,8 @@ public class PayrollProcessor {
         this.employeeContract = Utility.convertJsonToPOJO( jsonData.getJsonString(),EmployeeContract.class );
 
         this.employeeSalary = new EmployeeSalary();
-        this.employeeSalary.setFirstName( Utility.removeTrailingComma(this.employeeContract.getFirstName()) );
-        this.employeeSalary.setLastName( Utility.removeTrailingComma(this.employeeContract.getLastName()) );
+        this.employeeSalary.setFirstName( Utility.removeCommas(this.employeeContract.getFirstName()) );
+        this.employeeSalary.setLastName( Utility.removeCommas(this.employeeContract.getLastName()));
         this.employeeSalary.setGrossAmount( this.employeeContract.getGrossAmount() );
     }
 
