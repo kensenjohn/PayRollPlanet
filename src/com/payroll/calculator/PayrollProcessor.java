@@ -58,7 +58,7 @@ public class PayrollProcessor {
 
     private void calculateSalary() throws Exception {
 
-        BigDecimal bdGrossAmount = fixPennyDecimal(new BigDecimal(employeeContract.getGrossAmount()));
+        BigDecimal bdGrossAmount = Utility.fixPennyDecimal(new BigDecimal(employeeContract.getGrossAmount()));
 
         BigDecimal bdAmount = applyDeductions(Utility.DEDUCTION_TYPE.PRE_TAX, bdGrossAmount );
 
@@ -66,7 +66,7 @@ public class PayrollProcessor {
 
         bdAmount  = applyDeductions(Utility.DEDUCTION_TYPE.POST_TAX, bdAmount );
 
-        this.employeeSalary.setNetAmount( fixPennyDecimal(bdAmount).doubleValue() );
+        this.employeeSalary.setNetAmount( Utility.fixPennyDecimal(bdAmount).doubleValue() );
     }
 
 
@@ -89,7 +89,7 @@ public class PayrollProcessor {
         }
 
 
-        Double deduction = fixPennyDecimal(bdDeduction).doubleValue();
+        Double deduction = Utility.fixPennyDecimal(bdDeduction).doubleValue();
         if( deductionType == Utility.DEDUCTION_TYPE.PRE_TAX ) {
             this.employeeSalary.setPreTaxDeductionTotal( deduction );
         } else if( deductionType == Utility.DEDUCTION_TYPE.POST_TAX){
@@ -98,21 +98,6 @@ public class PayrollProcessor {
 
         return bdDeduction;
     }
-
-    /**
-     * Calculates the amount of tax from the tax rate that is provided.
-     * @param bdAmount - the amount to which tax has to be applied.
-     * @param bdTaxRate - the tax rate percentage. (20 is equal to 20%)
-     * @return BigDecimal
-     */
-    private BigDecimal calculateTaxAmount(BigDecimal bdAmount, BigDecimal bdTaxRate){
-        BigDecimal bdTaxAmount = new BigDecimal(0.0);
-        if( bdAmount.doubleValue()>0.0 ){
-            bdTaxAmount = bdAmount.multiply( bdTaxRate.divide( new BigDecimal(100)) );
-        }
-        return bdTaxAmount;
-    }
-
 
 
     private BigDecimal applyDeductions(Utility.DEDUCTION_TYPE deductionType , BigDecimal bdAmount ){
@@ -129,11 +114,11 @@ public class PayrollProcessor {
      */
     private BigDecimal applyTaxes( BigDecimal bdAmount ){
 
-        BigDecimal bdFederalTaxAmount = fixPennyDecimal( calculateTaxAmount(bdAmount, new BigDecimal(employeeContract.getFederalTaxRate())));
-        BigDecimal bdStateTaxAmount = fixPennyDecimal(calculateTaxAmount(bdAmount, new BigDecimal(employeeContract.getStateTaxRate())));
+        BigDecimal bdFederalTaxAmount = Utility.fixPennyDecimal(Calculator.calculateTaxAmount(bdAmount, new BigDecimal(employeeContract.getFederalTaxRate())));
+        BigDecimal bdStateTaxAmount = Utility.fixPennyDecimal(Calculator.calculateTaxAmount(bdAmount, new BigDecimal(employeeContract.getStateTaxRate())));
 
-        this.employeeSalary.setFederalTaxAmount( fixPennyDecimal( bdFederalTaxAmount ).doubleValue() );
-        this.employeeSalary.setStateTaxAmount( fixPennyDecimal( bdStateTaxAmount ).doubleValue());
+        this.employeeSalary.setFederalTaxAmount(bdFederalTaxAmount.doubleValue());
+        this.employeeSalary.setStateTaxAmount(bdStateTaxAmount.doubleValue());
 
         bdAmount = bdAmount.subtract(bdFederalTaxAmount).subtract(bdStateTaxAmount);
 
@@ -143,7 +128,7 @@ public class PayrollProcessor {
 
     private void bootstrapEmployeeData(  ) throws IOException, NoSuchMethodException {
         JsonData jsonData = (JsonData)requestData.getData();
-        this.employeeContract = Utility.convertJsonToPOJO( jsonData.getJsonString(),EmployeeContract.class );
+        this.employeeContract = Utility.convertJsonToPOJO( jsonData.getDataAsString(),EmployeeContract.class );
 
         this.employeeSalary = new EmployeeSalary();
         this.employeeSalary.setFirstName( Utility.removeCommas(this.employeeContract.getFirstName()) );
@@ -162,12 +147,7 @@ public class PayrollProcessor {
         return responseData;
     }
 
-    /*
-        Value is always two decimal places for pennies($0.01).
-     */
-    private BigDecimal fixPennyDecimal(BigDecimal bigDecimal){
-        return bigDecimal.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-    }
+
 
     /**
      * Generating the ResponseData here with Exception.

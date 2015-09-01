@@ -28,10 +28,10 @@ public class Payroll {
         RequestData requestData = new RequestData(data);
 
         PayrollProcessor payrollProcessor = new PayrollProcessor( requestData );
-        ResponseData responseData = payrollProcessor.getSalary(  );
+        ResponseData responseData = payrollProcessor.getSalary();
 
         JsonData jsonResponseData =  (JsonData)responseData.getData();
-        return Response.status(200).entity(jsonResponseData.getJsonString() ).build();
+        return Response.status(200).entity(jsonResponseData.getDataAsString()).build();
 
     }
 }

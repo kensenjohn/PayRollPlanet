@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,5 +42,12 @@ public class Utility {
             inputString = inputString.replaceAll(",", "");
         }
         return inputString;
+    }
+
+    /*
+        Value is always two decimal places for pennies($0.01).
+     */
+    public static BigDecimal fixPennyDecimal(BigDecimal bigDecimal){
+        return bigDecimal.setScale(2, BigDecimal.ROUND_HALF_EVEN);
     }
 }

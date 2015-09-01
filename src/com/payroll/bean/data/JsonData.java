@@ -5,10 +5,12 @@ package com.payroll.bean.data;
  */
 public class JsonData implements Data {
     private String jsonString = "" ;
-    public JsonData(String jsonString){
-        this.jsonString = jsonString;
+    public JsonData(String data){
+        this.jsonString = data;
     }
-    public String getJsonString(){
+
+    public String getDataAsString() {
         return this.jsonString;
     }
+
 }
